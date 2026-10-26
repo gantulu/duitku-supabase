@@ -1,0 +1,13 @@
+{
+  "tasks": {
+    "test": "deno test --allow-env tests/",
+    "check": "deno check edge-functions/duitku-create-invoice/index.ts edge-functions/duitku-callback/index.ts edge-functions/order-status/index.ts"
+  },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@1",
+    "@supabase/supabase-js": "npm:@supabase/supabase-js@2"
+  },
+  "compilerOptions": {
+    "strict": true
+  }
+}
