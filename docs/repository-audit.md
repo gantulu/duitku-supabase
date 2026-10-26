@@ -45,4 +45,4 @@ Because the repository had no prior code, there was no existing integration to v
 - No Supabase project was connected or inspected.
 - No Duitku merchant account, API credentials, or sandbox transaction was accessed.
 - No test/lint/typecheck could run because no implementation or test harness existed at the start.
-- The official documentation research baseline is in [duitku-pop-specification.md](./duitku-pop-specification.md); open questions in that file remain implementation gates.
+- The official documentation baseline and source-verification update are in [duitku-pop-specification.md](./duitku-pop-specification.md). An official POP callback result-code conflict (01 vs 02 for failure) remains an implementation gate.
