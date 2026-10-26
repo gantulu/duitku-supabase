@@ -221,3 +221,21 @@ These are proposed safe implementation rules, not claims made by Duitku:
 - Make callback processing idempotent and keep raw payload retention minimal/sanitized.
 - Treat request timeouts and uncertain provider responses as unresolved until reconciled by a verified provider-supported method.
 - Never let browser redirects or JavaScript callbacks mark an order paid.
+
+
+## 11. Direct source verification update — 2026-10-26
+
+The following source sections were opened directly during this pass: POP ID and EN API Reference; Create Invoice request headers, parameter table, response, JSON Object; Callback transport/parameters/signature; JS Callback; Redirect; Payment Method; HTTP/API Errors; Testing; Changelog. Supabase Edge Functions overview, Database overview, RLS, and Edge Function secrets pages were also opened directly.
+
+- Create Invoice signature example explicitly says HMAC-SHA256 output lowercase hexadecimal: [Create Invoice](https://docs.duitku.com/pop/id/) (Request Headers and PHP example).
+- Callback is HTTP POST with `application/x-www-form-urlencoded`; public URL, port 80/443, and HTTP 200 acknowledgement are explicit. Retry up to five attempts is stated in the Callback section: [Callback](https://docs.duitku.com/pop/id/).
+- **Official callback result-code conflict:** the Callback parameter table states `00 = Success`, `01 = Failed`; the Errors → API Response → Callback table states `00 = Success`, `02 = Failed`. The documentation is internally inconsistent. Do not ship terminal-failure mapping until Duitku confirms the authoritative code for the configured POP integration. Until resolved, only process `00` as success after full validation; record unknown/non-success codes for review without applying a terminal failure transition.
+- The Payment Method table lists channel codes and adds explicit requirements: credit methods require `customerDetail` and `itemDetails`; E-Commerce requires `customerVaName`. This is a provider requirement, not merely a design preference.
+- The Redirect section explicitly says redirect `resultCode` must not update payment status because customers can manually alter the URL.
+- The official changelog (English) includes Apr 2026: HMAC signature enhancement and MD5/SHA-256 marked obsolete; the Indonesian page has no matching Apr entry in the displayed changelog. Follow the current HMAC examples and do not use legacy methods.
+- The Indonesian Create Invoice section documents `itemDetails` total should match `paymentAmount`; item `price` is integer with no decimals. The sample customer address describes `countryCode` as alpha-3 while examples use `ID`, an unresolved documentation inconsistency.
+- Changelog as observed on 2026-10-26: Sep 2026 removal of QRIS Gudang Voucher; Jun 2026 callback `customerName`; Feb 2026 Tokopedia Card Payment / E-Wallet / Others and E-Commerce testing; Dec 2025 callback requirements; Oct 2025 tokenization-related fields; Aug 2025 QRIS Dana removal; English page Apr 2026 signature enhancement.
+
+### Inquiry/status-check contract
+
+The current POP page changelog mentions historical additions to an “inquiry request/response” but the directly inspected current POP API reference did not provide a clear, complete current endpoint contract (URL, method, headers/signature, request/response, error behavior). Therefore an inquiry endpoint is **not verified for implementation**. Do not implement or call one until the official current endpoint page/contract is located and validated with Duitku.
